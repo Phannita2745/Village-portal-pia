@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- custom style (คงของเดิมไว้ได้) -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-blue-50">
+  <%- include('../partials/navbar') %>
+
+  <!-- กว้างขึ้น และกำหนดระยะห่างซ้ายขวาให้ใกล้เส้นแดง -->
+  <main class="pt-20 mx-auto w-full max-w-7xl px-6 lg:px-16 xl:px-24 py-6">
+    <section class="rounded-2xl overflow-hidden shadow-sm border">
+      <!-- หัวแถบสีเขียว -->
+      <div class="bg-green-600 text-white px-6 py-3">
+        <h1 class="font-semibold text-lg">ข่าวประชาสัมพันธ์</h1>
+      </div>
+
+      <!-- รายการข่าว -->
+      <div class="bg-white">
+        <ul class="divide-y">
+          <% (items || []).forEach(function(it){ %>
+            <li>
+              <a href="/news/<%= it.id %>" class="block px-6 py-5 hover:bg-gray-50 transition">
+                <div class="flex items-start gap-5">
+                  <!-- รูปข่าว: ขนาดใกล้เคียงดีไซน์ -->
+                  <div class="w-56 flex-shrink-0">
+                    <div class="w-full h-44 bg-gray-100 rounded overflow-hidden border">
+                      <img
+                        src="<%= it.image ? '/uploads/' + it.image : '/default.jpg' %>"
+                        alt="<%= it.title %>"
+                        class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+
+                  <!-- เนื้อหา -->
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-gray-900 font-medium text-base sm:text-lg leading-snug">
+                      <%= it.title %>
+                    </h3>
+
+                    <% 
+                      const text = it.summary || it.content || '';
+                      const preview = text && text.length > 140 ? text.substring(0,140) + '…' : text;
+                    %>
+                    <% if (preview) { %>
+                      <p class="text-sm text-gray-700 mt-1"><%= preview %></p>
+                    <% } %>
+
+                    <div class="text-sm text-green-600 mt-2 flex items-center">
+                      <span class="inline-block w-2 h-2 rounded-full bg-green-600 mr-2"></span>
+                      <%= it.displayDate %>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <!-- เพจจิเนชัน (ถ้ามี) -->
+      <div class="bg-white px-6 pb-5 pt-3">
+        <% if (typeof pagination !== 'undefined') { %>
+          <nav class="flex justify-center gap-2 text-sm">
+            <% if (pagination.prev) { %>
+              <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<%= pagination.prev %>">ก่อนหน้า</a>
+            <% } %>
+            <% (pagination.pages || []).forEach(function(p){ %>
+              <a class="px-3 py-1 border rounded hover:bg-gray-50 <%= p.active ? 'bg-gray-100' : '' %>" href="<%= p.href %>"><%= p.label %></a>
+            <% }) %>
+            <% if (pagination.next) { %>
+              <a class="px-3 py-1 border rounded hover:bg-gray-50" href="<%= pagination.next %>">ถัดไป</a>
+            <% } %>
+          </nav>
+        <% } else { %>
+          <!-- ตัวอย่างปุ่มง่าย ๆ (ลบได้หากผูกเพจจริงแล้ว) -->
+          <nav class="flex justify-center gap-2 text-sm">
+            <a class="px-3 py-1 border rounded hover:bg-gray-50" href="?page=1">1</a>
+            <a class="px-3 py-1 border rounded hover:bg-gray-50" href="?page=2">2</a>
+            <a class="px-3 py-1 border rounded hover:bg-gray-50" href="?page=3">3</a>
+          </nav>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

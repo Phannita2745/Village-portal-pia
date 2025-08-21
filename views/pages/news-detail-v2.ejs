@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-blue-50">
+  <%- include('../partials/navbar') %>
+
+  <main class="pt-20 max-w-6xl mx-auto px-6 py-8">
+    <!-- DEBUG: pages/news-detail-v2 -->
+
+    <!-- แถบหัวสีเขียว เต็มความกว้าง -->
+    <div class="bg-green-600 text-white rounded px-6 py-3 mb-6">
+      <h1 class="text-xl sm:text-2xl font-bold">ข่าวประชาสัมพันธ์</h1>
+    </div>
+
+    <!-- การ์ดหลัก สีขาว เต็มกว้าง -->
+    <section class="bg-white rounded-lg shadow p-6 sm:p-10">
+      <!-- หัวเรื่อง -->
+      <h2 class="text-lg sm:text-2xl font-semibold text-gray-900 mb-6"><%= item.title %></h2>
+
+      <!-- รูปเดียวใหญ่ -->
+      <figure class="mb-6">
+        <img
+          src="<%= item.image ? '/uploads/' + item.image : '/uploads/placeholder.jpg' %>"
+          alt="<%= item.title %>"
+          class="w-full max-h-[560px] object-cover rounded"
+        />
+      </figure>
+
+      <!-- เนื้อหา -->
+      <article class="prose max-w-none leading-relaxed text-gray-800">
+        <%- item.body %>
+      </article>
+
+      <!-- วันที่ -->
+      <div class="mt-8 flex justify-end text-xs text-emerald-700">
+        ⏱️ <%= item.displayDate || '' %>
+      </div>
+    </section>
+
+    <!-- ปุ่มย้อนกลับ -->
+    <div class="mt-6">
+      <a href="/news" class="inline-block px-4 py-2 rounded border hover:bg-gray-50 text-sm">
+        ← กลับไปหน้าข่าวทั้งหมด
+      </a>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

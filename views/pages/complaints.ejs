@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <title><%= title || 'หัวข้อร้องเรียน' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- โหลดสไตล์ -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-blue-50">
+
+  <!-- นาวบาร์ -->
+  <%- include('../partials/navbar') %>
+
+  <!-- เนื้อหา -->
+  <main class="pt-20 max-w-6xl mx-auto p-6">
+    <div class="max-w-[980px] mx-auto px-4">
+      <section class=" rounded-lg">
+        <!-- แถบหัวเรื่อง -->
+        <div class="bg-green-600 text-white rounded-lg px-6 py-3 mb-6">
+          <h1 class="text-2xl font-bold">ข้อร้องเรียน</h1>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <!-- คำอธิบาย -->
+          <p class="text-[13px] leading-6 text-gray-600 mb-6">
+            เพื่อเป็นการคุ้มครองสิทธิของผู้ร้องเรียนและผู้ให้ข้อมูลที่กระทำโดยสุจริต
+            จะทำการปกปิดชื่อ ที่อยู่ หรือข้อมูลใดๆ ที่อาจระบุตัวผู้ร้องเรียน/ผู้ให้ข้อมูลได้
+            และเก็บรักษาข้อมูลดังกล่าวเป็นความลับ โดยจะใช้เพื่อประกอบการตรวจสอบเรื่องร้องเรียนเท่านั้น
+          </p>
+
+          <!-- แจ้งส่งสำเร็จ -->
+          <% if (sent) { %>
+          <div class="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+            ส่งเรื่องร้องเรียนเรียบร้อยแล้ว ขอบคุณที่แจ้งให้ทราบ
+          </div>
+          <% } %>
+
+          <!-- ฟอร์ม -->
+          <h2 class="text-[14px] font-semibold mb-1">ส่งข้อความถึงเรา</h2>
+          <form method="post" action="/complaints" class="space-y-5">
+            <!-- แถว ชื่อ + อีเมล -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-[12px] text-gray-700 mb-1">ชื่อ - นามสกุล :</label>
+                <input id="name" name="name" required
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-3 py-2 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+
+              <div>
+                <label for="email" class="block text-[12px] text-gray-700 mb-1">อีเมล :</label>
+                <input id="email" type="email" name="email" placeholder="name@example.com"
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-3 py-2 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+            </div>
+
+            <!-- โทรศัพท์ -->
+            <div class="max-w-xl">
+              <label for="phone" class="block text-[12px] text-gray-700 mb-1">โทรศัพท์ :</label>
+              <input id="phone" name="phone" placeholder="08x-xxx-xxxx"
+                class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-3 py-2 outline-none focus:ring-2 focus:ring-[#11a759]" />
+            </div>
+
+            <!-- รายละเอียด -->
+            <div>
+              <label for="details" class="block text-[12px] text-gray-700 mb-1">รายละเอียด :</label>
+              <textarea id="details" name="details" rows="12" required
+                class="w-full h-[260px] rounded-md border border-gray-300 bg-[#e6ffe9] px-3 py-2 outline-none focus:ring-2 focus:ring-[#11a759]"
+                placeholder="โปรดระบุรายละเอียดเหตุร้องเรียนให้ครบถ้วน"></textarea>
+            </div>
+
+            <!-- ปุ่มส่ง -->
+            <div>
+              <button type="submit"
+                class="rounded-md bg-green-500 px-8 py-2 text-white font-medium shadow hover:brightness-95">
+                ส่ง
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ฟุตเตอร์ -->
+  <%- include('../partials/footer') %>
+
+</body>
+</html>

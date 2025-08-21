@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title || 'ติดต่อเรา' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-blue-50">
+  <%- include('../partials/navbar') %>
+
+  <!-- กรอบหลัก: กว้างระดับกลางจอ ไม่เต็ม -->
+  <main class="pt-20 max-w-7xl mx-auto px-6">
+    <!-- หัวข้อ -->
+    <div class="bg-green-600 text-white rounded-lg px-6 py-3 mb-6">
+      <h1 class="text-2xl font-bold">ติดต่อเรา</h1>
+    </div>
+
+    <!-- กล่องเนื้อหา -->
+    <section class="bg-white shadow rounded-lg p-6 md:p-8">
+      <% if (sent) { %>
+        <div class="mb-6 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+          ส่งข้อความเรียบร้อยแล้ว ขอบคุณที่ติดต่อเรา
+        </div>
+      <% } %>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+        <!-- ซ้าย: ข้อมูลติดต่อ -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-gray-900">ข้อมูลติดต่อ</h2>
+
+          <div class="rounded-md border border-gray-200 p-4 md:p-5 bg-gray-50">
+            <p class="text-sm text-gray-700">
+              <span class="block font-medium text-gray-900 mb-1">ที่อยู่</span>
+              หมู่บ้านตัวอย่าง เลขที่ 123/45 ตำบล/อำเภอ จังหวัด 10000
+            </p>
+            <hr class="my-3" />
+            <p class="text-sm text-gray-700">
+              <span class="block font-medium text-gray-900 mb-1">อีเมล</span>
+              <a class="text-blue-600 hover:underline" href="mailto:Lorem@email.com">Lorem@email.com</a>
+            </p>
+            <p class="text-sm text-gray-700 mt-2">
+              <span class="block font-medium text-gray-900 mb-1">โทรศัพท์/โทรสาร</span>
+              <a class="text-blue-600 hover:underline" href="tel:0888888888">088-8888888</a>
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-base font-semibold text-gray-900 mb-2">แผนที่</h3>
+            <div class="rounded-lg overflow-hidden border">
+              <iframe
+                src="https://www.google.com/maps?q=Bangkok&output=embed"
+                class="w-full h-72 md:h-80"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                aria-label="แผนที่ตำแหน่งสำนักงาน"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- ขวา: ฟอร์ม -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-3">ส่งข้อความถึงเรา</h2>
+
+          <form method="post" action="/contact" class="space-y-6">
+            <!-- ชื่อ + อีเมล -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block text-[13px] text-gray-700 mb-1">ชื่อ - นามสกุล :</label>
+                <input id="name" name="name" required
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+              <div>
+                <label for="email" class="block text-[13px] text-gray-700 mb-1">อีเมล :</label>
+                <input id="email" type="email" name="email" placeholder="name@example.com"
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+            </div>
+
+            <!-- โทรศัพท์ + เรื่อง -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="phone" class="block text-[13px] text-gray-700 mb-1">โทรศัพท์ :</label>
+                <input id="phone" name="phone" placeholder="08x-xxx-xxxx"
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+              <div>
+                <label for="subject" class="block text-[13px] text-gray-700 mb-1">เรื่อง :</label>
+                <input id="subject" name="subject" placeholder="เรื่องที่ต้องการติดต่อ"
+                  class="w-full rounded-md border border-gray-300 bg-[#e6ffe9] px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#11a759]" />
+              </div>
+            </div>
+
+            <!-- ข้อความ -->
+            <div>
+              <label for="message" class="block text-[13px] text-gray-700 mb-1">ข้อความ :</label>
+              <textarea id="message" name="message" rows="10" required
+                class="w-full h-[220px] rounded-md border border-gray-300 bg-[#e6ffe9] px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#11a759]"
+                placeholder="โปรดระบุรายละเอียดให้ครบถ้วน"></textarea>
+            </div>
+
+            <!-- ปุ่มส่ง -->
+            <div class="flex justify-end">
+              <button type="submit"
+                class="rounded-md bg-green-500 px-8 py-2 text-white font-medium shadow hover:brightness-95">
+                ส่งข้อความ
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,191 @@
+/* ให้ footer เป็นแถบเรียบ ๆ เต็มกว้าง */
+.footer{
+  background:#fff;
+  border-top:1px solid #dcdcdc;   /* บาง ๆ พอ */
+}
+
+/* ความกว้างภายในให้เท่าหน้า (ปรับเลขนี้ให้เท่ากับ container หลักของเว็บคุณ) */
+.footer-inner{
+  max-width: 1200px;              /* ถ้าคอนเทนต์หลักใช้ 1140/1280 ก็เปลี่ยนให้ตรงกัน */
+  margin: 0 auto;
+  padding: 24px 32px;             /* ระยะห่างสมส่วน */
+  display: grid;
+  grid-template-columns: 1fr auto;/* ซ้ายยืด, ขวาพอดี */
+  align-items: center;             /* จัดกึ่งกลางแนวตั้ง */
+  gap: 24px;
+}
+
+/* สไตล์ตัวอักษร */
+.footer-left h3{ margin:0 0 6px; color:#0b6a17; font-weight:700; }
+.footer-left p{ margin:0; color:#666; font-size:14px; line-height:1.5; }
+
+.footer-right{ text-align:right; }
+.footer-right p{ margin:0; color:#0a8a22; font-size:14px; line-height:1.6; }
+.footer-right a{ color:#0a8a22; text-decoration:none; }
+.footer-right .strong{ font-weight:700; }
+
+/* ให้ footer ติดล่างเมื่อหน้าสั้น */
+html,body{ height:100%; }
+body{ display:flex; flex-direction:column; }
+footer{ margin-top:auto; }
+
+/* มือถือ: เรียงซ้อนกลาง */
+@media (max-width: 768px){
+  .footer-inner{
+    grid-template-columns: 1fr;
+    text-align:center;
+  }
+  .footer-right{ text-align:center; }
+}
+
+/* Banner */
+.qa-banner { background:#cce7ff; padding:32px 0; }
+.qa-box {
+  max-width: 900px; margin: 0 auto; background:#fff;
+  border:3px solid #FFD54F; text-align:center; padding:48px 16px;
+}
+.qa-box h1{ color:#00A651; margin:0; font-size:42px; font-weight:700; }
+.qa-box p{ color:#00A651; margin-top:8px; font-size:36px; font-weight:700; }
+
+/* Page */
+.container{ max-width:900px; margin:24px auto; padding:0 12px; }
+.qa-actions{ display:flex; gap:8px; }
+.qa-actions input{ flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:6px; }
+.qa-actions button{ padding:10px 14px; border:0; border-radius:8px; background:#00A651; color:#fff; cursor:pointer; }
+.qa-list{ margin-top:16px; list-style:none; padding:0; }
+.qa-item{ display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #eee; }
+.status{ margin-left:8px; }
+.status.open{ color:#d97706; }      /* ส้ม */
+.status.answered{ color:#2563eb; }  /* น้ำเงิน */
+.status.closed{ color:#16a34a; }    /* เขียว */
+
+/* Modal */
+.modal.hidden{ display:none; }
+.modal{ position:fixed; inset:0; background:rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center; }
+.modal-card{ background:#fff; width:560px; max-width:90vw; border-radius:10px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.2); }
+.modal-card input, .modal-card textarea{ width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; margin:6px 0; }
+.modal-card textarea{ min-height:140px; resize:vertical; }
+.modal-actions{ display:flex; justify-content:flex-end; gap:8px; }
+.modal-actions button{ padding:10px 14px; border-radius:8px; border:0; }
+.modal-actions button:last-child{ background:#00A651; color:#fff; }
+
+.qa-card {
+  display: block;
+  background: #fff;
+  color: #00A651;
+  text-align: center;
+  text-decoration: none;
+  padding: 12px 8px;
+  margin: 10px 0;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.qa-card:hover {
+  background: #f9f9f9;
+  transform: translateY(-2px);
+}
+
+.qa-card h2 {
+  font-size: 22px;       /* ขนาดใหญ่ขึ้น */
+  font-weight: 700;      /* หนามากขึ้น */
+  margin: 0 0 4px;
+}
+
+.qa-card p {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.sidebar-card {
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:14px;
+  margin:12px 0;
+}
+
+.card-title {
+  color:#00A651;
+  font-weight:700;
+  font-size:16px;
+  margin:0 0 8px;
+  border-bottom:1px solid #eef2f7;
+  padding-bottom:6px;
+}
+
+/* การ์ดไซด์บาร์ */
+.sidebar-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:14px;
+  margin:12px 0;
+}
+
+/* หัวการ์ด */
+.card-title{
+  color:#00A651;
+  font-weight:700;
+  font-size:16px;
+  margin:0 0 8px;
+  border-bottom:1px solid #eef2f7;
+  padding-bottom:6px;
+  text-align:center; /* ✅ จัดให้ข้อความอยู่กลาง */
+}
+
+/* QR */
+.qr{ text-align:center; margin:10px 0 14px; }
+.qr img{ width:140px; max-width:100%; display:block; margin:0 auto; }
+.qr-caption{ font-size:12px; color:#6b7280; margin-top:6px; }
+
+/* การ์ด */
+.sidebar-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+
+/* หัวข้อ */
+.card-title {
+  text-align: center;
+  color: #00A651;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* รายการสถิติ */
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+.stats-list li:last-child {
+  border-bottom: none;
+}
+.stats-list span {
+  color: #374151;
+}
+.stats-list b {
+  color: #374151;        /* เขียวอ่อน (#4ade80 ของ Tailwind = green-400) */
+  font-weight: 600;      /* น้ำหนักลดลง */
+  font-size: 17px;       /* เล็กลงนิดหน่อย */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  letter-spacing: 0.3px; /* ระยะตัวอักษรเล็กน้อย */
+}
+
+.line-clamp-2{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

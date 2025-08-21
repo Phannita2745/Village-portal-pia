@@ -1,0 +1,65 @@
+<%- include('../partials/navbar') %>
+
+<div class="qa-banner">
+  <div class="qa-box">
+    <h1>Q&amp;A</h1>
+    <p>กระดานถาม-ตอบ</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="qa-actions">
+    <input id="q-search" placeholder="ค้นหาคำถาม..." />
+    <button id="btn-ask">+ สร้างคำถาม</button>
+  </div>
+  <ul id="q-list" class="qa-list"></ul>
+</div>
+
+<div id="ask-modal" class="modal hidden">
+  <div class="modal-card">
+    <h3>สร้างคำถาม</h3>
+    <input id="ask-title" placeholder="หัวข้อคำถาม" />
+    <textarea id="ask-body" placeholder="รายละเอียด"></textarea>
+    <div class="modal-actions">
+      <button id="ask-cancel">ยกเลิก</button>
+      <button id="ask-submit">ส่งคำถาม</button>
+    </div>
+  </div>
+</div>
+
+<script>
+async function loadQuestions() {
+  const s = document.getElementById('q-search').value || '';
+  const res = await fetch('/api/qa?search='+encodeURIComponent(s));
+  const qs = await res.json();
+  document.getElementById('q-list').innerHTML = qs.map(
+    q=>`<li class="qa-item">
+          <a href="#" onclick="openQ(${q.id});return false;">${q.title}</a>
+          <small class="status ${q.status}">${q.status}</small>
+        </li>`
+  ).join('');
+}
+async function openQ(id){
+  const res = await fetch('/api/qa/'+id);
+  const {question,answers}=await res.json();
+  alert(`${question.title}\n\n${question.body}\n\nคำตอบ:\n`+
+        (answers.map(a=>`- ${a.body} (${a.author})`).join('\n') || 'ยังไม่มีคำตอบ'));
+}
+document.getElementById('btn-ask').onclick = () =>
+  document.getElementById('ask-modal').classList.remove('hidden');
+document.getElementById('ask-cancel').onclick = () =>
+  document.getElementById('ask-modal').classList.add('hidden');
+document.getElementById('ask-submit').onclick = async ()=>{
+  const title = document.getElementById('ask-title').value.trim();
+  const body  = document.getElementById('ask-body').value.trim();
+  if(!title) return alert('กรอกหัวข้อก่อนนะ');
+  await fetch('/api/qa',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({title,body})});
+  document.getElementById('ask-modal').classList.add('hidden');
+  document.getElementById('ask-title').value='';
+  document.getElementById('ask-body').value='';
+  loadQuestions();
+};
+document.getElementById('q-search').oninput = loadQuestions;
+loadQuestions();
+</script>
