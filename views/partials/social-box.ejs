@@ -1,0 +1,23 @@
+<div class="bg-white shadow rounded-lg p-6 mb-6 text-center">
+  <h3 class="font-semibold text-base mb-4">ติดตามโซเชียลมีเดียของเรา</h3>
+
+  <% if ((qrs || []).length) { %>
+    <div class="space-y-6">
+      <% qrs.forEach(q => { %>
+        <div>
+          <a href="<%= q.link || '#' %>" <%= q.link ? 'target="_blank" rel="noopener"' : '' %>>
+            <img src="<%= q.image ? '/uploads/' + q.image : '/uploads/placeholder.jpg' %>"
+                 alt="<%= q.platform %> QR"
+                 class="mx-auto"
+                 style="width: 150px; height: 150px;" />
+          </a>
+          <div class="mt-2 text-sm text-gray-700 font-medium">
+            <%= q.label %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="text-sm text-gray-500">ยังไม่มีข้อมูลโซเชียล</p>
+  <% } %>
+</div>

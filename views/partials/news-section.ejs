@@ -1,0 +1,24 @@
+<section class="bg-white p-3 shadow rounded-lg mb-6">
+  <div class="flex items-center justify-between mb-2">
+    <h2 class="text-base font-semibold">📣 ข่าวประชาสัมพันธ์</h2>
+    <a href="/news" class="text-sm text-blue-600 hover:underline">ดูทั้งหมด</a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <% (news || []).slice(0,4).forEach(n => { 
+         const _id = n.id ?? n.news_id;
+         const raw = (n.content || '').replace(/<[^>]+>/g, '');
+         const preview = raw.length > 80 ? raw.substring(0, 80) + '…' : raw;
+         const dt = n.displayDate || new Date(n.date).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+         const img = n.image ? '/uploads/' + n.image : '/default.jpg';
+    %>
+      <a href="/news/<%= _id %>" class="bg-gray-50 hover:bg-gray-100 rounded-lg overflow-hidden border transition">
+        <img src="<%= img %>" alt="<%= n.title %>" class="w-full h-28 object-cover">
+        <div class="p-2">
+          <p class="text-xs text-gray-500"><%= dt %></p>
+          <h3 class="text-sm font-bold text-gray-800 line-clamp-2"><%= n.title %></h3>
+          <p class="text-gray-600 text-xs line-clamp-2"><%= preview %></p>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>

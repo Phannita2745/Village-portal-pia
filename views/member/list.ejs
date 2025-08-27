@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Member Management</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Member List</h1>
+
+  <a href="/admin/add">Add New Member</a>
+  <br/><br/>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Privilege ID</th>
+        <th>Status ID</th>
+        <th>Tel</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% members.forEach(member => { %>
+        <tr>
+          <td><%= member.id %></td>
+          <td><%= member.username %></td>
+          <td><%= member.password %></td>
+          <td><%= member.privilge_id %></td>
+          <td><%= member.status_id %></td>
+          <td><%= member.tel %></td>
+          <td><%= member.email %></td>
+          <td>
+            <a href="/admin/update/<%= member.id %>">Update</a> |
+            <a href="/admin/delete/<%= member.id %>" onclick="return confirm('Delete this member?');">Delete</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

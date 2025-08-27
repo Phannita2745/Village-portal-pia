@@ -1,65 +1,192 @@
-<%- include('../partials/navbar') %>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Q&A | VillagePortal</title>
 
-<div class="qa-banner">
-  <div class="qa-box">
-    <h1>Q&amp;A</h1>
-    <p>กระดานถาม-ตอบ</p>
-  </div>
-</div>
+  <!-- TailwindCSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- ถ้ามีสไตล์ของคุณเอง -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <%- include('../partials/navbar') %>
 
-<div class="container">
-  <div class="qa-actions">
-    <input id="q-search" placeholder="ค้นหาคำถาม..." />
-    <button id="btn-ask">+ สร้างคำถาม</button>
-  </div>
-  <ul id="q-list" class="qa-list"></ul>
-</div>
+  <main class="pt-20 max-w-5xl mx-auto px-4">
+    <!-- Hero / Banner -->
+    <section class="rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 p-6 mb-6">
+      <h1 class="text-2xl font-bold">Q&amp;A</h1>
+      <p class="text-gray-600 mt-1">กระดานถาม–ตอบ แลกเปลี่ยนความคิดเห็นของชุมชน</p>
+    </section>
 
-<div id="ask-modal" class="modal hidden">
-  <div class="modal-card">
-    <h3>สร้างคำถาม</h3>
-    <input id="ask-title" placeholder="หัวข้อคำถาม" />
-    <textarea id="ask-body" placeholder="รายละเอียด"></textarea>
-    <div class="modal-actions">
-      <button id="ask-cancel">ยกเลิก</button>
-      <button id="ask-submit">ส่งคำถาม</button>
+    <!-- Actions -->
+    <section class="bg-white rounded-xl shadow p-4 mb-6">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <input
+            id="q-search"
+            type="search"
+            placeholder="ค้นหาคำถาม…"
+            class="w-full rounded-lg border border-gray-300 pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        </div>
+
+        <button id="btn-ask"
+          class="inline-flex items-center justify-center rounded-lg px-4 py-2 bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500">
+          + สร้างคำถาม
+        </button>
+      </div>
+    </section>
+
+    <!-- List -->
+    <section id="q-wrapper" class="bg-white rounded-xl shadow divide-y">
+      <ul id="q-list" class="divide-y">
+        <!-- จะถูกเติมด้วย JS -->
+      </ul>
+
+      <!-- ว่างเปล่า -->
+      <div id="q-empty" class="hidden p-8 text-center text-gray-500">
+        ยังไม่มีคำถาม ลองสร้างคำถามแรกของคุณได้เลย 🎉
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (ถ้ามี) -->
+  <%- include('../partials/footer') %>
+
+  <!-- Modal: Create Question -->
+  <div id="ask-modal"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 p-4">
+    <div class="w-full max-w-lg bg-white rounded-2xl shadow-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-semibold">สร้างคำถาม</h3>
+        <button id="ask-close" class="text-gray-400 hover:text-gray-600 text-xl" aria-label="ปิด">×</button>
+      </div>
+
+      <div class="space-y-3">
+        <input id="ask-title" placeholder="หัวข้อคำถาม"
+              class="w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500" />
+        <textarea id="ask-body" rows="5" placeholder="รายละเอียด"
+                  class="w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 mt-4">
+        <button id="ask-cancel"
+                class="rounded-lg px-4 py-2 border hover:bg-gray-50">
+          ยกเลิก
+        </button>
+        <button id="ask-submit"
+                class="rounded-lg px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+          ส่งคำถาม
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-async function loadQuestions() {
-  const s = document.getElementById('q-search').value || '';
-  const res = await fetch('/api/qa?search='+encodeURIComponent(s));
-  const qs = await res.json();
-  document.getElementById('q-list').innerHTML = qs.map(
-    q=>`<li class="qa-item">
-          <a href="#" onclick="openQ(${q.id});return false;">${q.title}</a>
-          <small class="status ${q.status}">${q.status}</small>
-        </li>`
-  ).join('');
-}
-async function openQ(id){
-  const res = await fetch('/api/qa/'+id);
-  const {question,answers}=await res.json();
-  alert(`${question.title}\n\n${question.body}\n\nคำตอบ:\n`+
-        (answers.map(a=>`- ${a.body} (${a.author})`).join('\n') || 'ยังไม่มีคำตอบ'));
-}
-document.getElementById('btn-ask').onclick = () =>
-  document.getElementById('ask-modal').classList.remove('hidden');
-document.getElementById('ask-cancel').onclick = () =>
-  document.getElementById('ask-modal').classList.add('hidden');
-document.getElementById('ask-submit').onclick = async ()=>{
-  const title = document.getElementById('ask-title').value.trim();
-  const body  = document.getElementById('ask-body').value.trim();
-  if(!title) return alert('กรอกหัวข้อก่อนนะ');
-  await fetch('/api/qa',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({title,body})});
-  document.getElementById('ask-modal').classList.add('hidden');
-  document.getElementById('ask-title').value='';
-  document.getElementById('ask-body').value='';
-  loadQuestions();
-};
-document.getElementById('q-search').oninput = loadQuestions;
-loadQuestions();
-</script>
+  <!-- Scripts -->
+  <script>
+    // --- Helpers ---
+    const $ = (s, r=document)=>r.querySelector(s);
+    const $$ = (s, r=document)=>Array.from(r.querySelectorAll(s));
+
+    function pill(status){
+      const st = (status||'').toLowerCase();
+      const cls =
+        st === 'answered' ? 'bg-green-100 text-green-700' :
+        st === 'pending'  ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-gray-100 text-gray-600';
+      const label =
+        st === 'answered' ? 'ตอบแล้ว' :
+        st === 'pending'  ? 'รอตอบ' : (status || 'สถานะไม่ระบุ');
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cls}">${label}</span>`;
+    }
+
+    function row(q){
+      const safeTitle = q.title?.replace(/</g,'&lt;').replace(/>/g,'&gt;') || '';
+      return `
+        <li class="p-4 hover:bg-gray-50">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <a href="#" class="font-medium text-gray-900 hover:underline" onclick="openQ(${q.id});return false;">
+              ${safeTitle}
+            </a>
+            <div class="flex items-center gap-3 text-sm text-gray-500">
+              ${pill(q.status)}
+              <span>${new Date(q.created_at || Date.now()).toLocaleString('th-TH')}</span>
+              <span class="hidden sm:inline">โดย ${q.author || 'ไม่ระบุ'}</span>
+            </div>
+          </div>
+        </li>`;
+    }
+
+    // --- Load list ---
+    async function loadQuestions() {
+      try {
+        const s = $('#q-search').value || '';
+        const res = await fetch('/api/qa?search='+encodeURIComponent(s));
+        const qs = await res.json();
+        $('#q-list').innerHTML = (qs || []).map(row).join('');
+        $('#q-empty').classList.toggle('hidden', (qs||[]).length > 0);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // --- Open one question ---
+    async function openQ(id){
+      const res = await fetch('/api/qa/'+id);
+      const {question,answers} = await res.json();
+      const answerText = (answers||[])
+        .map(a=>`• ${a.body} — ${a.author||'ผู้ดูแล'}`)
+        .join('\n');
+      alert(`${question.title}\n\n${question.body}\n\nคำตอบ:\n${answerText || 'ยังไม่มีคำตอบ'}`);
+    }
+    window.openQ = openQ;
+
+    // --- Modal controls ---
+    const modal = $('#ask-modal');
+    const openBtn = $('#btn-ask');
+    const closeBtn = $('#ask-close');
+    const cancelBtn = $('#ask-cancel');
+
+    function openModal(){ modal.classList.remove('hidden'); modal.classList.add('flex'); $('#ask-title').focus(); }
+    function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+    // --- Submit new question ---
+    $('#ask-submit').addEventListener('click', async ()=>{
+      const title = $('#ask-title').value.trim();
+      const body  = $('#ask-body').value.trim();
+      if(!title){ alert('กรอกหัวข้อก่อนนะ'); $('#ask-title').focus(); return; }
+
+      const res = await fetch('/api/qa',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({title, body})
+      });
+
+      if(!res.ok){ alert('ส่งคำถามไม่สำเร็จ'); return; }
+
+      closeModal();
+      $('#ask-title').value=''; $('#ask-body').value='';
+      loadQuestions();
+    });
+
+    // live search (debounce)
+    let t=null;
+    $('#q-search').addEventListener('input', ()=>{
+      clearTimeout(t); t=setTimeout(loadQuestions, 200);
+    });
+
+    // init
+    loadQuestions();
+  </script>
+</body>
+</html>

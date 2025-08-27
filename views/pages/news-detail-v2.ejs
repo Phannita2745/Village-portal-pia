@@ -37,10 +37,12 @@
         <%- item.body %>
       </article>
 
-      <!-- วันที่ -->
-      <div class="mt-8 flex justify-end text-xs text-emerald-700">
-        ⏱️ <%= item.displayDate || '' %>
+      <!-- วันที่ + ยอดวิว -->
+      <div class="mt-8 flex justify-between text-xs text-emerald-700">
+        <div>⏱️ <%= item.displayDate || '' %></div>
+        <div>👁️ <%= item.views %> ครั้ง</div>
       </div>
+
     </section>
 
     <!-- ปุ่มย้อนกลับ -->

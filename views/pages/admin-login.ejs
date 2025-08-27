@@ -3,39 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>เข้าสู่ระบบ</title>
+  <title>เข้าสู่ระบบผู้ดูแลระบบ</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-gray-100">
   <div class="flex items-center justify-center min-h-screen px-4">
     <div class="w-full max-w-md">
+      <!-- โลโก้/ชื่อเว็บ -->
       <div class="text-center mb-6">
         <a href="/" class="inline-flex items-center gap-2">
           <span class="text-2xl font-extrabold text-gray-800">Village Portal</span>
         </a>
-        <p class="text-sm text-gray-500 mt-1">ยินดีต้อนรับกลับมา</p>
+        <p class="text-sm text-gray-500 mt-1">สำหรับผู้ดูแลระบบ</p>
       </div>
 
-      <form method="POST" action="/login" class="bg-white rounded-2xl shadow p-6 md:p-7 space-y-5">
-        <h1 class="text-xl font-semibold text-gray-900">เข้าสู่ระบบ</h1>
+      <!-- ฟอร์ม -->
+      <form method="POST" action="/admin/login"
+            class="bg-white rounded-2xl shadow p-6 md:p-7 space-y-5">
+        <h1 class="text-xl font-semibold text-gray-900">เข้าสู่ระบบผู้ดูแลระบบ</h1>
 
-        <!-- เบอร์โทร -->
+        <!-- แสดง error ถ้ามี -->
+        <% if (typeof error === 'string' && error) { %>
+          <div class="rounded-md border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm">
+            <%= error %>
+          </div>
+        <% } %>
+
+        <!-- อีเมล -->
         <div>
-          <label for="tel" class="block text-sm font-medium text-gray-700">เบอร์โทร</label>
-          <input id="tel" name="tel" type="tel" autocomplete="tel" required
-                 pattern="^[0-9+\-\s]{8,20}$"
+          <label for="email" class="block text-sm font-medium text-gray-700">อีเมล</label>
+          <input id="email" name="email" type="email" autocomplete="username" required
                  class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                         placeholder-gray-400"
-                 placeholder="0812345678" />
-          <p class="mt-1 text-xs text-gray-500">ใส่เฉพาะตัวเลข/เครื่องหมาย + - และช่องว่าง</p>
+                 placeholder="admin@example.com" />
         </div>
 
         <!-- รหัสผ่าน + toggle -->
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
           <div class="mt-1 relative">
-            <input id="password" name="password" type="password" autocomplete="current-password" required minlength="8"
+            <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6"
                    class="w-full rounded-lg border border-gray-300 px-3 py-2 pr-10
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
                           placeholder-gray-400"
@@ -45,9 +53,10 @@
                            focus:outline-none focus:ring-2 focus:ring-blue-300"
                     aria-label="แสดง/ซ่อนรหัสผ่าน">👁️</button>
           </div>
-          <p class="mt-1 text-xs text-gray-500">อย่างน้อย 8 ตัวอักษร</p>
+          <p class="mt-1 text-xs text-gray-500">อย่างน้อย 6 ตัวอักษร</p>
         </div>
 
+        <!-- จำฉันไว้ / ลืมรหัสผ่าน -->
         <div class="flex items-center justify-between">
           <label class="inline-flex items-center gap-2 text-sm text-gray-700">
             <input type="checkbox" name="remember" class="rounded border-gray-300">
@@ -56,23 +65,28 @@
           <a href="/forgot" class="text-sm text-blue-600 hover:underline">ลืมรหัสผ่าน?</a>
         </div>
 
+        <!-- ปุ่มเข้าสู่ระบบผู้ดูแล -->
         <button type="submit"
-                class="w-full inline-flex items-center justify-center rounded-lg bg-green-600 text-white font-medium py-2.5
-                       hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-          เข้าสู่ระบบ
+                class="w-full inline-flex items-center justify-center rounded-lg
+                       text-white font-medium py-2.5 hover:opacity-90
+                       focus:outline-none focus:ring-2 focus:ring-blue-300"
+                style="background-color:#2992D5;">
+          เข้าสู่ระบบผู้ดูแล
         </button>
 
-        <p class="text-center text-sm text-gray-600">
-          ยังไม่มีบัญชี? <a href="/register" class="text-blue-600 hover:underline">สมัครสมาชิก</a>
+        <p class="mt-2 text-xs text-gray-500 text-center">
+          ยังไม่มีบัญชี? <a href="/admin/register" class="text-blue-600 hover:underline">สมัครผู้ดูแล</a>
         </p>
-      </form>
 
-      <div class="text-center mt-4">
-        <a href="/" class="text-sm text-gray-500 hover:text-gray-700 hover:underline">กลับหน้าแรก</a>
-      </div>
+      </form>
+      <!-- ลิงก์กลับหน้าแรก -->
+        <p class="text-center text-sm text-gray-600">
+          <a href="/" class="hover:underline">กลับหน้าแรก</a>
+        </p>
     </div>
   </div>
 
+  <!-- Toggle password -->
   <script>
     (function(){
       const btn = document.getElementById('togglePw');

@@ -1,0 +1,18 @@
+<div class="relative w-full overflow-hidden rounded-lg shadow mb-8">
+  <!-- ปุ่มเลื่อน -->
+  <button id="prevBtn" class="absolute top-1/2 left-3 z-10 ...">&#10094;</button>
+  <button id="nextBtn" class="absolute top-1/2 right-3 z-10 ...">&#10095;</button>
+
+  <div id="slider" class="flex transition-transform duration-500">
+    <% news.forEach((n) => { %>
+      <div class="min-w-full relative">
+        <img src="<%= n.image ? '/uploads/' + n.image : '/default.jpg' %>"
+             class="w-full h-60 sm:h-64 md:h-72 lg:h-80 xl:h-96 object-cover" alt="<%= n.title %>">
+        <div class="absolute bottom-0 bg-black bg-opacity-50 w-full p-4 text-white">
+          <h2 class="text-xl font-bold"><%= n.title %></h2>
+          <p class="text-sm"><%= (n.content || '').substring(0, 60) %>...</p>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="bg-white shadow rounded-lg p-6 mb-6">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-base font-semibold">สำหรับผู้ดูแลระบบ</h3>
+    <% if (user && (user.isAdmin || user.role === 'admin')) { %>
+      <span class="inline-flex items-center text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">
+        ลงชื่อเข้าใช้แล้ว
+      </span>
+    <% } %>
+  </div>
+
+  <% if (!(user && (user.isAdmin || user.role === 'admin'))) { %>
+  <!-- ยังไม่ล็อกอิน -->
+  <a href="/admin/login"
+     class="inline-flex items-center justify-center w-full rounded py-2 text-sm font-medium text-white hover:opacity-90 focus:ring-2 focus:ring-blue-300"
+     style="background-color:#2992D5;">
+    เข้าสู่ระบบผู้ดูแล
+  </a>
+
+  <!-- ✅ เพิ่มลิงก์สมัครผู้ดูแล -->
+  <p class="mt-2 text-xs text-gray-500 text-center">
+    ยังไม่มีบัญชี? <a href="/admin/register" class="text-blue-600 hover:underline">สมัครผู้ดูแล</a>
+  </p>
+<% } else { %>
+  <!-- ล็อกอินแล้ว -->
+  <div class="grid grid-cols-1 gap-2 text-sm">
+    <a href="/admin" class="rounded border px-3 py-2 hover:bg-gray-50">แดชบอร์ด</a>
+    <a href="/admin/news" class="rounded border px-3 py-2 hover:bg-gray-50">จัดการข่าวประชาสัมพันธ์</a>
+    <a href="/admin/activities" class="rounded border px-3 py-2 hover:bg-gray-50">จัดการกิจกรรม</a>
+    <a href="/admin/complaints" class="rounded border px-3 py-2 hover:bg-gray-50">เรื่องร้องเรียน</a>
+  </div>
+  <div class="pt-3">
+    <a href="/logout"
+       class="inline-flex items-center justify-center w-full rounded py-2 text-sm font-medium
+              bg-red-600 text-white hover:bg-red-700 focus:ring-2 focus:ring-red-400">
+      ออกจากระบบ
+    </a>
+  </div>
+<% } %>
+</div>

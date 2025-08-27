@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-6">
+        <a href="/" class="inline-flex items-center gap-2">
+          <span class="text-2xl font-extrabold text-gray-800">Village Portal</span>
+        </a>
+        <p class="text-sm text-gray-500 mt-1">สมัครผู้ดูแลระบบ</p>
+      </div>
+
+      <form method="POST" action="/admin/register" class="bg-white rounded-2xl shadow p-6 md:p-7 space-y-5" novalidate>
+        <h1 class="text-xl font-semibold text-gray-900">สมัครผู้ดูแลระบบ</h1>
+
+        <% if (error) { %>
+          <div class="rounded-md border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+          <div class="rounded-md border border-green-200 bg-green-50 text-green-700 px-3 py-2 text-sm"><%= success %></div>
+        <% } %>
+
+        <!-- ชื่อ-นามสกุล -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">ชื่อ</label>
+            <input name="firstName" value="<%= (values && values.firstName) || '' %>" required
+                   class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">นามสกุล</label>
+            <input name="lastName" value="<%= (values && values.lastName) || '' %>" required
+                   class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+        </div>
+
+        <!-- เบอร์โทร (บังคับ) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">เบอร์โทร</label>
+          <input name="tel" value="<%= (values && values.tel) || '' %>" required
+                 pattern="^[0-9+\-\s]{8,20}$"
+                 class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 placeholder="0812345678" />
+          <p class="mt-1 text-xs text-gray-500">ใส่เฉพาะตัวเลข/เครื่องหมาย + - และช่องว่าง</p>
+        </div>
+
+        <!-- อีเมล (บังคับ) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">อีเมล</label>
+          <input type="email" name="email" value="<%= (values && values.email) || '' %>" required
+                 class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 placeholder="admin@example.com" />
+        </div>
+
+        <!-- รหัสผ่าน + ยืนยัน -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
+          <input type="password" name="password" minlength="8" required
+                 class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 placeholder="อย่างน้อย 8 ตัวอักษร" />
+          <p class="mt-1 text-xs text-gray-500">รหัสผ่านอย่างน้อย 8 ตัวอักษร</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">ยืนยันรหัสผ่าน</label>
+          <input type="password" name="confirm" minlength="8" required
+                 class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 placeholder="พิมพ์รหัสผ่านอีกครั้ง" />
+        </div>
+
+        <!-- โค้ดเชิญ (ถ้ามี) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">โค้ดเชิญ (ถ้ามี)</label>
+          <input name="invite" value="<%= (values && values.invite) || '' %>"
+                 class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+        </div>
+
+        <button type="submit"
+                class="w-full inline-flex items-center justify-center rounded-lg text-white font-medium py-2.5 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                style="background-color:#2992D5;">
+          สมัครผู้ดูแลระบบ
+        </button>
+
+        <p class="text-center text-sm text-gray-600">
+          มีบัญชีแล้ว? <a href="/admin/login" class="text-blue-600 hover:underline">เข้าสู่ระบบ</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model complain {
+  id               Int                @id @default(autoincrement())
+  detail           String?            @db.MediumText
+  created_id       Int
+  status_id        Int
+  member           member             @relation(fields: [created_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_complain_member1")
+  status           status             @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_complain_status1")
+  complain_gallery complain_gallery[]
+
+  @@index([created_id], map: "fk_complain_member1")
+  @@index([status_id], map: "fk_complain_status1")
+}
+
+model complain_gallery {
+  id          Int      @id
+  imagepath   String?  @db.VarChar(45)
+  complain_id Int
+  complain    complain @relation(fields: [complain_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_complain_gallery_complain1")
+
+  @@index([complain_id], map: "fk_complain_gallery_complain1")
+}
+
+model document {
+  id         Int     @id
+  file       String? @db.MediumText
+  created_id Int
+  member     member  @relation(fields: [created_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_document_member1")
+
+  @@index([created_id], map: "fk_document_member1")
+}
+
+model gallery {
+  id              Int          @id
+  imagepath       String?      @db.VarChar(100)
+  informations_id Int
+  informations    informations @relation(fields: [informations_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gallery_informations1")
+
+  @@index([informations_id], map: "fk_gallery_informations1")
+}
+
+model informations {
+  id                                     Int       @id @default(autoincrement())
+  topic                                  String?   @db.VarChar(100)
+  detail                                 String?   @db.MediumText
+  videourl                               String?   @db.VarChar(300)
+  editreason                             String?   @db.VarChar(200)
+  deletereason                           String?   @db.VarChar(200)
+  createdat                              DateTime? @db.DateTime(0)
+  updatedat                              DateTime? @db.DateTime(0)
+  created_id                             Int
+  updated_id                             Int
+  enable                                 Int?      @default(0)
+  gallery                                gallery[]
+  member_informations_created_idTomember member    @relation("informations_created_idTomember", fields: [created_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_informations_member1")
+  member_informations_updated_idTomember member    @relation("informations_updated_idTomember", fields: [updated_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_informations_member2")
+
+  @@index([created_id], map: "fk_informations_member1")
+  @@index([updated_id], map: "fk_informations_member2")
+}
+
+model member {
+  id                                           Int            @id @default(autoincrement())
+  username                                     String?        @db.VarChar(45)
+  password                                     String?        @db.VarChar(45)
+  privilege_id                                 Int
+  status_id                                    Int
+  tel                                          String?        @db.VarChar(20)
+  email                                        String?        @db.VarChar(45)
+  complain                                     complain[]
+  document                                     document[]
+  informations_informations_created_idTomember informations[] @relation("informations_created_idTomember")
+  informations_informations_updated_idTomember informations[] @relation("informations_updated_idTomember")
+  privilege                                    privilege      @relation(fields: [privilege_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_member_privilege")
+  status                                       status         @relation(fields: [status_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_member_status1")
+
+  @@index([privilege_id], map: "fk_member_privilege")
+  @@index([status_id], map: "fk_member_status1")
+}
+
+model privilege {
+  id     Int      @id @default(autoincrement())
+  name   String?  @db.VarChar(45)
+  member member[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model status {
+  id       Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(45)
+  complain complain[]
+  member   member[]
+}

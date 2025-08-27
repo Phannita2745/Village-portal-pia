@@ -1,0 +1,23 @@
+<div class="bg-white rounded-lg shadow p-5 mb-6">
+  <h3 class="text-base font-semibold mb-3">สถิติผู้เยี่ยมชม</h3>
+
+  <div class="space-y-2 text-sm">
+    <div class="flex items-center justify-between">
+      <span class="text-gray-600">ผู้เข้าใช้งานรวม</span>
+      <span class="font-semibold"><%= totalVisits ?? 0 %></span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="text-gray-600">วันนี้</span>
+      <span class="font-semibold"><%= todayVisits ?? 0 %></span>
+    </div>
+    <hr class="my-2 border-gray-100">
+    <div class="flex items-center justify-between">
+      <span class="text-gray-600">เปิดเว็บไซต์</span>
+      <span class="text-gray-800"><%= siteOpened ?? '-' %></span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span class="text-gray-600">อัปเดตล่าสุด</span>
+      <span class="text-gray-800"><%= lastUpdated ?? '-' %></span>
+    </div>
+  </div>
+</div>

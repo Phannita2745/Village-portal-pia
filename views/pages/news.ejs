@@ -15,6 +15,55 @@
   <!-- กว้างขึ้น และกำหนดระยะห่างซ้ายขวาให้ใกล้เส้นแดง -->
   <main class="pt-20 mx-auto w-full max-w-7xl px-6 lg:px-16 xl:px-24 py-6">
     <section class="rounded-2xl overflow-hidden shadow-sm border">
+      <!-- Search + Filter -->
+      <section class="mt-6 mb-6"> <!-- 👈 mt-6 = เว้นระยะห่างจาก navbar -->
+        <form action="/news" method="get" 
+              class="flex flex-col sm:flex-row items-stretch gap-4">
+          
+          <!-- ช่องค้นหา -->
+          <div class="flex-1">
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 mt-1 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 3.5a7.5 7.5 0 0013.15 13.15z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="q"
+                value="<%= typeof q !== 'undefined' ? q : '' %>"
+                placeholder="ค้นหา..."
+                class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition"
+              />
+            </div>
+          </div>
+
+          <!-- ตัวกรอง -->
+          <div class="sm:w-56">
+            <select
+              name="sort"
+              class="w-full rounded-lg border border-gray-300 py-2 px-3 bg-white shadow-sm focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition text-center"
+            >
+              <option value="oldest" <%= sort==='oldest' ? 'selected' : '' %>>เก่าสุด → ล่าสุด</option>
+              <option value="latest" <%= (!sort || sort==='latest') ? 'selected' : '' %>>ล่าสุด → เก่าสุด</option>
+              <option value="popular" <%= sort==='popular' ? 'selected' : '' %>>ยอดนิยม</option>
+            </select>
+          </div>
+
+          <!-- ปุ่ม (เรียบง่ายแบบเก่า) -->
+          <div class="sm:w-32">
+            <button
+              type="submit"
+              class="w-full bg-white text-green-600 font-semibold rounded-lg py-2 border shadow hover:bg-gray-50 transition"
+            >
+              ค้นหา
+            </button>
+          </div>
+        </form>
+      </section>
+
+
       <!-- หัวแถบสีเขียว -->
       <div class="bg-green-600 text-white px-6 py-3">
         <h1 class="font-semibold text-lg">ข่าวประชาสัมพันธ์</h1>

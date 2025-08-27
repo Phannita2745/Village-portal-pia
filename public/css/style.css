@@ -186,6 +186,8 @@ footer{ margin-top:auto; }
 .line-clamp-2{
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;               /* ✅ เพิ่มบรรทัดนี้ */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+

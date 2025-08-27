@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
-
 </head>
 <body class="bg-blue-50">
 
@@ -14,360 +13,64 @@
   <%- include('../partials/navbar') %>
 
   <main class="pt-20 max-w-6xl mx-auto p-6">
+    <section class="mt-6 mb-6">
+      <!-- ✅ สไลด์ข่าว -->
+      <%- include('../partials/slider', { news: news }) %>
 
-    <!-- ✅ สไลด์ข่าว -->
-    <div class="relative w-full overflow-hidden rounded-lg shadow mb-8">
-
-      <!-- ปุ่มเลื่อนซ้าย -->
-      <button id="prevBtn"
-        class="absolute top-1/2 left-3 z-10 transform -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-800 rounded-full p-2 shadow-md transition duration-300">
-        &#10094;
-      </button>
-
-      <!-- ปุ่มเลื่อนขวา -->
-      <button id="nextBtn"
-        class="absolute top-1/2 right-3 z-10 transform -translate-y-1/2 bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-800 rounded-full p-2 shadow-md transition duration-300">
-        &#10095;
-      </button>
-
-      <!-- ตัว slider -->
-      <div id="slider" class="flex transition-transform duration-500">
-        <% news.forEach((n, i) => { %>
-          <div class="min-w-full relative">
-            <img 
-              src="<%= n.image ? '/uploads/' + n.image : '/default.jpg' %>" 
-              class="w-full h-60 sm:h-64 md:h-72 lg:h-80 xl:h-96 object-cover" 
-              alt="<%= n.title %>">
-
-            <div class="absolute bottom-0 bg-black bg-opacity-50 w-full p-4 text-white">
-              <h2 class="text-xl font-bold"><%= n.title %></h2>
-              <p class="text-sm"><%= n.content.substring(0, 60) %>...</p>
+      <!-- ✅ ส่วนเนื้อหา -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 📰 ข่าว + 📅 กิจกรรม -->
+        <div class="md:col-span-2">
+          <!-- 📢 ประกาศ (โปสเตอร์) -->
+          <section class="bg-white p-4 shadow rounded mb-6">
+            <h2 class="text-lg font-semibold mb-3">📢 ประกาศ</h2>
+            <div class="flex justify-center">
+              <img src="/uploads/Poster.jpg" alt="โปสเตอร์รณรงค์ป้องกันไข้เลือดออก"
+                  class="w-full max-w-xl h-auto object-contain rounded"/>
             </div>
-          </div>
-        <% }) %>
+          </section>
+
+          <!-- 📣 ข่าวประชาสัมพันธ์ -->
+          <%- include('../partials/news-section', { news: news }) %>
+
+          <!-- 📢 ข่าวประชาสัมพันธ์เฉพาะสมาชิก -->
+          <%- include('../partials/activities-section', { activities: activities, user: user }) %>
+        </div>
+
+        <!-- 📌 Sidebar -->
+        <aside>
+          <!-- 📅 ปฏิทิน -->
+          <%- include('../partials/calendar') %>
+
+          <!-- 🔐 Login สำหรับสมาชิก -->
+          <%- include('../partials/login-box', { loginError: loginError, loginNotice: loginNotice }) %>
+
+          <!-- 👨‍💻 ผู้ดูแลระบบ -->
+          <%- include('../partials/admin-box') %>
+
+          <!-- ❓ Q&A -->
+          <%- include('../partials/qa-box') %>
+
+          <!-- 📱 โซเชียล -->
+          <%- include('../partials/social-box', { qrs: qrs }) %>
+
+          <!-- 📊 สถิติ -->
+          <%- include('../partials/stats-box') %>
+        </aside>
       </div>
-    </div>
+    </section>
 
-    <!-- ✅ ส่วนเนื้อหา -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-      <!-- 📰 ข่าว + 📅 กิจกรรม -->
-      <div class="md:col-span-2">
-
-        <!-- 📌 โปสเตอร์ประกาศ (ไฟล์จริง /uploads/Poster.jpg) -->
-        <section class="bg-white p-4 shadow rounded mb-6">
-          <h2 class="text-lg font-semibold mb-3">📢 ประกาศ</h2>
-          <div class="flex justify-center">
-            <img
-            src="/uploads/Poster.jpg"
-            alt="โปสเตอร์รณรงค์ป้องกันไข้เลือดออก"
-            class="w-full max-w-xl h-auto object-contain rounded"
-          />
-        </div>
-      </section>
-
-        <!-- 📰 ข่าว -->
-       <section class="bg-white p-3 shadow rounded-lg mb-6">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-base font-semibold flex items-center gap-1">📣 ข่าวประชาสัมพันธ์</h2>
-          <a href="/news" class="text-sm text-blue-600 hover:underline">ดูทั้งหมด</a>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <% (news || []).slice(0,4).forEach(function(n){ 
-              // ให้รองรับทั้งกรณีที่ฝั่ง SQL alias เป็น id และกรณีเป็น news_id
-              const _id = (typeof n.id !== 'undefined') ? n.id : n.news_id;
-
-              // กันค่าว่าง และตัด tag HTML ออกก่อนย่อ
-              const raw = (n.content || '').replace(/<[^>]+>/g, '');
-              const preview = raw.length > 80 ? raw.substring(0, 80) + '…' : raw;
-
-              // แสดงวันที่แบบไทย (ถ้า server ไม่ได้ส่ง displayDate มา)
-              const dt = n.displayDate || new Date(n.date).toLocaleDateString('th-TH', {
-                year: 'numeric', month: 'long', day: 'numeric'
-              });
-
-              // รูป fallback
-              const img = n.image ? ('/uploads/' + n.image) : '/default.jpg';
-          %>
-            <a href="/news/<%= _id %>" class="bg-gray-50 hover:bg-gray-100 rounded-lg overflow-hidden border transition">
-              <img src="<%= img %>" alt="<%= n.title %>" class="w-full h-28 object-cover">
-              <div class="p-2">
-                <p class="text-xs text-gray-500"><%= dt %></p>
-                <h3 class="text-sm font-bold text-gray-800 line-clamp-2"><%= n.title %></h3>
-                <p class="text-gray-600 text-xs line-clamp-2"><%= preview %></p>
-              </div>
-            </a>
-          <% }) %>
-
-          <% for (let i = (news || []).length; i < 4; i++) { %>
-            <a href="/news" class="bg-white rounded-lg border border-dashed grid place-items-center h-40 text-sm text-gray-400">
-              เพิ่มข่าว…
-            </a>
-          <% } %>
-        </div>
-      </section>
-
-
-        <!-- 📢 ข่าวประชาสัมพันธ์เฉพาะสมาชิก -->
-        <section class="mt-8">
-          <h2 class="text-lg font-semibold mb-4 flex items-center">
-            📢 ข่าวประชาสัมพันธ์เฉพาะสมาชิก
-          </h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <% activities.forEach(a => { %>
-              <% if (user && user.isMember) { %>
-                <a href="/activities/<%= a.id %>" class="block bg-white rounded-lg shadow hover:shadow-lg transition p-2">
-                  <img src="<%= a.image ? '/uploads/' + a.image : '/uploads/placeholder.jpg' %>"
-                      alt="<%= a.title %>" class="w-full h-40 object-cover rounded-md mb-2">
-                  <div class="px-2 pb-2">
-                    <strong class="block text-sm mb-1"><%= a.title %></strong>
-                    <p class="text-xs text-gray-600">วันที่: <%= a.date %></p>
-                    <p class="text-xs text-gray-600">สถานที่: <%= a.location %></p>
-                  </div>
-                </a>
-              <% } else { %>
-                <a href="/login" class="block bg-white rounded-lg shadow hover:shadow-lg transition p-2 opacity-70">
-                  <img src="<%= a.image ? '/uploads/' + a.image : '/uploads/placeholder.jpg' %>"
-                      alt="เข้าสู่ระบบเพื่อดูรายละเอียด" class="w-full h-40 object-cover rounded-md mb-2">
-                  <div class="px-2 pb-2">
-                    <strong class="block text-sm mb-1 text-gray-500"><%= a.title %></strong>
-                    <p class="text-xs text-gray-400">สำหรับสมาชิกเท่านั้น</p>
-                  </div>
-                </a>
-              <% } %>
-            <% }) %>
-
-            <% for (let i = activities.length; i < 4; i++) { %>
-              <a href="<%= (user && user.isMember) ? '/activities' : '/login' %>"
-                class="block bg-white rounded-lg border border-dashed grid place-items-center h-48 text-sm text-gray-400">
-                <%= (user && user.isMember) ? 'เพิ่มกิจกรรม…' : 'เข้าสู่ระบบเพื่อดูทั้งหมด' %>
-              </a>
-            <% } %>
-          </div>
-
-        </section>
-      </div>
-
-      <!-- 📅 ปฏิทินด้านข้าง -->
-      <aside>
-      <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-2xl p-4 md:p-5 h-[440px] md:h-[460px] overflow-hidden flex flex-col">
-        <!-- หัวข้อ + ปุ่ม -->
-        <div class="flex items-center justify-between mb-3 md:mb-4">
-          <h2 class="font-semibold text-lg md:text-xl text-gray-900">ปฏิทิน</h2>
-          <button id="btnSideCreate"
-            class="inline-flex items-center rounded-xl px-3 py-1.5 text-sm font-medium bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-            + สร้าง
-          </button>
-        </div>
-
-        <% 
-          const now = new Date();
-          const year = now.getFullYear();
-          const month = now.getMonth(); // 0=ม.ค.
-          const firstDay = new Date(year, month, 1).getDay();
-          const daysInMonth = new Date(year, month + 1, 0).getDate();
-          const monthsTH = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
-        %>
-
-        <!-- เดือน/ปี -->
-        <div class="text-center mb-3 md:mb-4">
-          <p class="font-semibold text-base md:text-lg text-gray-800"><%= monthsTH[month] %> <%= year %></p>
-        </div>
-
-        <!-- ตาราง (ทำเป็นคอนเทนต์ยืด-เลื่อนในแนวตั้งได้เล็กน้อย) -->
-        <div class="flex-1 overflow-y-auto pr-1">
-          <!-- หัวคอลัมน์วัน -->
-          <div class="grid grid-cols-7 gap-1.5 text-[12px] md:text-sm text-gray-500 mb-1">
-            <div class="text-center font-medium">อา</div>
-            <div class="text-center font-medium">จ</div>
-            <div class="text-center font-medium">อ</div>
-            <div class="text-center font-medium">พ</div>
-            <div class="text-center font-medium">พฤ</div>
-            <div class="text-center font-medium">ศ</div>
-            <div class="text-center font-medium">ส</div>
-          </div>
-
-          <!-- ช่องวันที่ -->
-          <div class="grid grid-cols-7 gap-1.5 text-sm select-none">
-            <% for (let i = 0; i < firstDay; i++) { %>
-              <div class="h-9 md:h-10"></div>
-            <% } %>
-
-            <% for (let d = 1; d <= daysInMonth; d++) { 
-                const isToday = (d === now.getDate());
-                const dow = new Date(year, month, d).getDay(); // 0=อา,6=ส
-                const gcalDayUrl = `https://calendar.google.com/calendar/u/0/r/day/${year}/${month+1}/${d}`;
-            %>
-              <div class="group">
-                <a href="<%= gcalDayUrl %>" target="_blank" rel="noopener"
-                  title="เปิด Google Calendar: <%= d %> <%= monthsTH[month] %> <%= year %>"
-                  class="date-cell h-9 md:h-10 w-full rounded-lg flex items-center justify-center transition
-                          hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400
-                          <%= isToday ? 'border-2 border-blue-500' : '' %>"
-                  data-day="<%= d %>">
-                  <span class="<%= (dow===0 || dow===6) ? 'text-gray-500' : 'text-gray-800' %> font-medium">
-                    <%= d %>
-                  </span>
-                </a>
-              </div>
-            <% } %>
-          </div>
-        </div>
-      </div>
-        <aside class="space-y-6">
-                <!-- ฟอร์มเข้าสู่ระบบ -->
-                <div class="bg-white shadow p-6 rounded space-y-4 mt-10">
-                  <div class="flex items-center gap-x-2">
-                    <h2 class="text-base font-semibold">เข้าสู่ระบบสำหรับสมาชิก</h2>
-                    <a href="/register" class="text-sm text-blue-600 hover:underline">สมัครสมาชิก</a>
-                  </div>
-
-                  <% if (typeof loginError !== 'undefined' && loginError) { %>
-                    <div class="rounded border border-red-200 bg-red-50 text-red-700 px-3 py-2 text-sm" role="alert">
-                      <%= loginError %>
-                    </div>
-                  <% } %>
-                  <% if (typeof loginNotice !== 'undefined' && loginNotice) { %>
-                    <div class="rounded border border-blue-200 bg-blue-50 text-blue-700 px-3 py-2 text-sm" role="status">
-                      <%= loginNotice %>
-                    </div>
-                  <% } %>
-
-                  <form action="/login" method="post" class="space-y-4" novalidate>
-                    <div>
-                      <label for="loginEmail" class="block text-sm font-medium text-gray-700">อีเมล</label>
-                      <input id="loginEmail" name="email" type="email" autocomplete="username" required
-                            class="mt-1 w-full rounded border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-
-                    <div>
-                      <label for="loginPassword" class="block text-sm font-medium text-gray-700">รหัสผ่าน</label>
-                      <div class="mt-1 relative">
-                        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required minlength="6"
-                              class="w-full rounded border px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                        <button type="button" id="loginToggle" aria-controls="loginPassword" aria-label="แสดง/ซ่อนรหัสผ่าน"
-                                class="absolute inset-y-0 right-2 my-auto px-2 rounded text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400">👁️</button>
-                      </div>
-                      <p class="mt-1 text-xs text-gray-500">อย่างน้อย 6 ตัวอักษร</p>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                      <label class="inline-flex items-center gap-2 text-sm">
-                        <input type="checkbox" name="remember" class="rounded"> จำฉันไว้ในระบบ
-                      </label>
-                      <a href="/forgot" class="text-sm text-blue-600 hover:underline">ลืมรหัสผ่าน?</a>
-                    </div>
-
-                    <button type="submit" class="w-full bg-green-600 text-white rounded py-2 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                      เข้าสู่ระบบ
-                    </button>
-                  </form>
-                <!-- ต่อท้ายภายใน <aside> เดิม หลัง </div> ของฟอร์มสมาชิก -->
-                <div class="bg-white shadow p-6 rounded space-y-2">
-                  <h3 class="text-base font-semibold">สำหรับผู้ดูแลระบบ</h3>
-
-                  <ul class="list-disc pl-5 text-sm space-y-1">
-                    <li>
-                      <a href="/admin/login"
-                        class="inline-flex items-center font-medium text-blue-600 hover:underline">
-                        เข้าสู่ระบบ
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                </div>
-                <a href="/qa" class="qa-card">
-                  <h2>Q&amp;A</h2>
-                  <p>กระดานถาม-ตอบ</p>
-                </a>
-              </aside>
-             <!-- การ์ด: ติดตามโซเชียล -->
-              <div class="sidebar-card">
-                <h3 class="card-title">ติดตามโซเชียลมีเดียของเรา</h3>
-
-                <% const _qrs = (typeof qrs !== 'undefined' && qrs) ? qrs : []; %>
-                <% if (_qrs.length) { %>
-                  <% _qrs.forEach(q => { %>
-                    <div class="qr">
-                      <a href="<%= q.link || '#' %>" <%= q.link ? 'target="_blank" rel="noopener"' : '' %>>
-                        <img src="<%= q.image ? '/uploads/' + q.image : '/uploads/placeholder.jpg' %>" alt="<%= q.platform %> QR">
-                      </a>
-                      <div class="qr-caption"><%= q.label %></div>
-                    </div>
-                  <% }) %>
-                <% } else { %>
-                  <div class="text-sm text-gray-500">ยังไม่มีข้อมูลโซเชียล</div>
-                <% } %>
-              </div>
-
-              <!-- การ์ด: สถิติผู้เยี่ยมชม -->
-              <div class="sidebar-card">
-                <h3 class="card-title">สถิติผู้เยี่ยมชม</h3>
-                <ul class="stats-list">
-                  <li><span>ผู้เข้าใช้งานรวม</span><b>0</b></li>
-                  <li><span>วันนี้</span><b>0</b></li>
-                  <li><span>เปิดเว็บไซต์</span><b>-</b></li>
-                  <li><span>อัปเดตล่าสุด</span><b>-</b></li>
-                </ul>
-              </div>
-
-      </aside>
-
-      <script>
-      (function () {
-        const year  = <%= year %>;
-        const month = <%= month %> + 1;
-        let selected = new Date().getDate();
-
-        function pad(n){ return String(n).padStart(2,'0'); }
-        function allDayRange(y,m,d){
-          const start = `${y}${pad(m)}${pad(d)}`;
-          const endDate = new Date(y, m-1, d+1);
-          const end = `${endDate.getFullYear()}${pad(endDate.getMonth()+1)}${pad(endDate.getDate())}`;
-          return `${start}/${end}`;
-        }
-
-        document.querySelectorAll('.date-cell').forEach(el=>{
-          el.addEventListener('click', ()=>{
-            selected = parseInt(el.dataset.day, 10);
-          });
-        });
-
-        document.getElementById('btnSideCreate').addEventListener('click', ()=>{
-          const dates = allDayRange(year, month, selected);
-          const title = encodeURIComponent('กิจกรรมชุมชน');
-          const details = encodeURIComponent('สร้างจากเว็บไซต์หมู่บ้าน');
-          const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}`;
-          window.open(url, '_blank', 'noopener');
-        });
-      })();
-      </script>
-
-              <script>
-                (function(){
-                  const btn = document.getElementById('loginToggle');
-                  const input = document.getElementById('loginPassword');
-                  if(btn && input){
-                    btn.addEventListener('click', () => {
-                      const show = input.getAttribute('type') === 'password';
-                      input.setAttribute('type', show ? 'text' : 'password');
-                      btn.textContent = show ? '🙈' : '👁️';
-                    });
-                  }
-                })();
-              </script>
-      </aside>
-
-    </div>
+    
   </main>
+
+  <!-- ✅ Footer -->
+  <%- include('../partials/footer') %>
 
   <!-- ✅ Script ควบคุม Slider -->
   <script>
     const slider = document.getElementById('slider');
     const prev = document.getElementById('prevBtn');
     const next = document.getElementById('nextBtn');
-
     let index = 0;
     const slideCount = <%= news.length %>;
 
@@ -379,14 +82,10 @@
       index = (index - 1 + slideCount) % slideCount;
       updateSlider();
     });
-
     next.addEventListener('click', () => {
       index = (index + 1) % slideCount;
       updateSlider();
     });
   </script>
-  
-<%- include('../partials/footer') %>
 </body>
 </html>
-
