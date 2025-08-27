@@ -5,7 +5,6 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const routes = require('./routes/index');
 
 // ----- DB (global ให้ routes ใช้งานได้) -----
 const db = mysql.createConnection({
@@ -14,7 +13,7 @@ const db = mysql.createConnection({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME
 });
-global.db = db;
+global.db = db; // << ต้องเกิดก่อน require routes
 
 // ----- Views & static -----
 app.set('view engine', 'ejs');
@@ -34,7 +33,7 @@ app.use(session({
 app.get('/calendar', (req, res) => res.render('pages/calendar'));
 
 // ***** สำคัญ: ให้ใช้ routes/index.js เป็นตัวจัดการ /, /news, /news/:id ทั้งหมด *****
-// (อย่าประกาศ app.get('/news') / app.get('/news/:id') ในไฟล์นี้อีก)
+const routes = require('./routes/index');   // << ย้ายมาหลัง global.db
 app.use('/', routes);
 
 // (ตัวเลือก) health check เล็ก ๆ
@@ -44,6 +43,13 @@ app.get('/api/debug/health', (req, res) => {
     res.json({ ok: true, db: rows[0].db });
   });
 });
+
+// Routers
+const statusRouter = require("./routes/status");
+app.use("/status", statusRouter);
+
+const adminRouter = require("./routes/admin");
+app.use("/admin", adminRouter);
 
 // Start
 app.listen(3000, () => {
